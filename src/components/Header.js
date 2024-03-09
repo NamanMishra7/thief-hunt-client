@@ -24,7 +24,7 @@ function Header() {
       </div>
       <div style={{ width: "33%", display: "flex", flexDirection: "row-reverse" }}>
         <Button onClick={handleReset}>
-          <b>reset</b>
+          <b style={{ color: 'white' }}>reset</b>
         </Button>
       </div>
     </div>

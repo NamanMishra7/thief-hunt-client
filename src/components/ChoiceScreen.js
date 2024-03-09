@@ -89,9 +89,25 @@ function ChoiceScreen({ gameState, setGameState }) {
         {
           Object.keys(choices).map((el) => {
             return (
-              <div className="clickable" style={{ width: "30%", background: 'lightblue', borderRadius: "15px", display: "flex", flexDirection: "column" }}>
-                <img src={`/cop-${el.split('p')[1]}.png`} width={"90%"} style={{ borderRadius: "15px", marginLeft: "auto", marginRight: "auto", marginTop: "1rem" }} />
+              
+              <div className="card-wrapper">
+      
+              <div class="card">
+                
+                <div class="card-image">
+                  <img src={`/cop-${el.split('p')[1]}.png`} width={"100%"} height={"480px"} />
+                </div>
+
+                <div class="details">
+                  <h2 style={{ color: "black" }}>{getCop(el.split('p')[1]).name}
+                    <br />
+                    <div class="job-title">
+                      <b>{getCop(el.split('p')[1]).rank}</b>
+                    </div>
+                  </h2>
+                </div>
               </div>
+            </div>
             );
           })
         }
@@ -112,25 +128,49 @@ function ChoiceScreen({ gameState, setGameState }) {
       <div style={{ display: "flex", width: '100%', margin: "1rem", gap: '1rem' }}>
         <div style={{ width: "40%" }}>
           <img src={`/cop-${cop}.png`} width={"100%"} style={{ borderRadius: "15px", marginLeft: "auto", marginRight: "auto" }} />
+          <h3>
+            {
+              `${getCop(cop).rank} ${getCop(cop).name}`
+            }
+          </h3>
         </div>
         <hr/>
-        <div style={{ width: "60%", display: 'flex', flexDirection: 'column', gap: "1rem", textAlign: "center" }}>
+        <div style={{ width: "60%", display: 'flex', flexDirection: 'column', gap: "0.5rem", textAlign: "center" }}>
+          <div style={{ display: "flex", flexDirection: 'row', justifyContent: 'center' }}>
           {
             city == null
-             ? <p>Select city to seacrh in</p>
-             : <p>Select vehicle</p>
+             ? <b style={{ fontSize: "120%" }}>Select city to seacrh in</b>
+             : <b style={{fontSize: "120%" }}>Select vehicle</b>
           }
+          <div style={{ marginLeft: "auto" }}>
+          <Button onClick={() => setCity(null)} variant="outlined" >
+              <b style={{ color: "white" }}>Back</b>
+            </Button>
+            </div>
+            
+          </div>
+          
           {
             city != null
               ? vehicles.map((el) => {
                 return (
-                  <div onClick={() => handleVehicleSelect(el.uid)} className="clickable" style={{ display: "flex", gap: '1rem', width: "100%", height: "120px", backgroundColor: "RGB(108, 180, 238, 0.4)", borderRadius: "15px", padding: "0.2rem" }}>
+                  <div onClick={() => {
+                    cities.find(el => el.uid == city).distance * 2 > el.range ? console.log('') :
+                    handleVehicleSelect(el.uid)}
+                    } className={
+                      cities.find(el => el.uid == city).distance * 2 > el.range ? "" : "clickable"
+                    } style={{ display: "flex", gap: '1rem', width: "100%", height: "120px",
+                    backgroundColor: cities.find(el => el.uid == city).distance * 2 > el.range ? "grey" : "RGB(108, 180, 238, 0.4)",
+                    borderRadius: "15px", padding: "0.2rem" }}>
                     <img src={`/${el.name.toLowerCase()}.png`} height={"100%"} style={{ borderRadius: "15px" }} />
-                    <div style={{ display: "flex", flexDirection: "row", gap: "1rem" }}>
+                    <div style={{ display: "flex", flexDirection: "row", gap: "1rem", textAlign: "left" }}>
                       <div>
                         <b style={{ margin: "0" }}>{el.name}</b>
                         <p style={{ margin: "0" }}>{el.range} KM</p>
                         <p style={{ margin: "0" }}>{el.count}</p>
+                        {
+                          cities.find(el => el.uid == city).distance * 2 > el.range && <b > This vehicle wont make it for a round trip!</b>
+                        }
                       </div>
                     </div>
                   </div>
@@ -140,13 +180,15 @@ function ChoiceScreen({ gameState, setGameState }) {
                   return (
                     <div onClick={() => handleCitySelect(el.uid)} className="clickable" style={{ display: "flex", gap: '1rem', width: "100%", height: "120px", backgroundColor: "RGB(108, 180, 238, 0.4)", borderRadius: "15px", padding: "0.2rem" }}>
                       <img src={`/${el.name.toLowerCase()}.png`} height={"100%"} style={{ borderRadius: "15px" }} />
-                      <div style={{ display: "flex", flexDirection: "row", gap: "1rem" }}>
-                        <div>
-                          <b style={{ margin: "0" }}>{el.name}</b>
+                      <div style={{ display: "flex", flexDirection: "row", gap: "1rem", textAlign: "left", width: '100%' }}>
+                        <div style={{ width: "30%" }}>
+                          <b style={{ margin: "0", fontSize: '120%' }}>{el.name}</b>
                           <p style={{ margin: "0" }}>{el.knownAs}</p>
                           <p style={{ margin: "0" }}>{el.distance} KM</p>
                         </div>
-                        <div>
+                        <hr/>
+                        <div style={{ width: "70%" }}>
+                          <b>description</b>
                           <p>{el.description}</p>
                         </div>
                       </div>
